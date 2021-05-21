@@ -17,3 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::post('/api/register', 'App\Http\Controllers\UsersController@register');
+Route::post('/api/login', 'App\Http\Controllers\UsersController@login');

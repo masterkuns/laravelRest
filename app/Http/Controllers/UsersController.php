@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\helpers\JwtAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,8 +25,8 @@ class UsersController extends Controller
             $validate = Validator::make($paramsArray, [
                 'nombres' => 'required|alpha',
                 'apellidos' => 'required|alpha',
-                'documentos' => 'required',
-                'correo' => 'required|email|unique:users',
+                'documentos' => 'required|unique:usuarios',
+                'correo' => 'required|email|unique:usuarios',
                 'contraseña' => 'required',
             ]); //Comprobar si el usuario existe
             if ($validate->fails()) {
@@ -38,7 +39,7 @@ class UsersController extends Controller
                 return response()->json($data, $data['code']);
             } else {
                 //Cifrar Pass
-                $pwd = password_hash($params->contraseña, PASSWORD_BCRYPT, ['cost' => 4]);
+                $pwd = hash('sha256', $params->contraseña);
 
                 //Crear Usario
                 $user = new User();
@@ -66,5 +67,16 @@ class UsersController extends Controller
             return response()->json($data, $data['code']);
         }
 
+    }
+    public function login(Request $request)
+    {
+
+        $jwtAuth = new \App\helpers\JwtAuth();
+
+        $correo = "angeldav99@hotmail.com";
+        $contraseña = 'lordaeron';
+        $pwd = hash('sha256', $contraseña);
+
+        return response()->json($jwtAuth->singUp($correo, $pwd, true, ), 200);
     }
 }
