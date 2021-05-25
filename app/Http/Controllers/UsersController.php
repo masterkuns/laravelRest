@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\helpers\JwtAuth;
 use App\Models\User;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -133,13 +135,13 @@ class UsersController extends Controller
                 'email' => 'required|email|unique:usuarios,' . $user->sub, //Comprobar si usuario existe (duplicado)
             ]);
             //Quitar los campos que no quiero actualizar
-            unset($params_array['ids']);
+            unset($params_array['id']);
             unset($params_array['rol']);
             unset($params_array['contraseña']);
             unset($params_array['apellidos']);
             unset($params_array['estado']);
             //Actualizar el usuario en la base de datos
-            $user_update = User::where('ids', $user->sub)->update($params_array);
+            $user_update = User::where('id', $user->sub)->update($params_array);
             //Devolver un array con el resultado
             $data = array(
                 'code' => 200,
@@ -186,6 +188,41 @@ class UsersController extends Controller
                 'image' => $image_name,
                 'status' => 'success',
                 'code' => 200,
+            );
+        }
+        return response()->json($data, $data['code']);
+    }
+
+    public function getImage($filename)
+    {
+        $isset = Storage::disk('users')->exists($filename);
+
+        if ($isset) {
+            $file = Storage::disk('users')->get($filename);
+            return new HttpResponse($file, 200);
+        } else {
+            $data = array(
+                'code' => 400,
+                'status' => 'error',
+                'message' => "La imagen no existe",
+            );
+            return response()->json($data, $data['code']);
+        }
+    }
+    public function detail($id)
+    {
+        $user = User::find($id);
+        if (is_object($user)) {
+            $data = array(
+                'code' => 200,
+                'status' => 'success',
+                'user' => $user,
+            );
+        } else {
+            $data = array(
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'el usuario no existe',
             );
         }
         return response()->json($data, $data['code']);

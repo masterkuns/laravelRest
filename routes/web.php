@@ -20,4 +20,6 @@ Route::get('/', function () {
 Route::post('/api/register', 'App\Http\Controllers\UsersController@register');
 Route::post('/api/login', 'App\Http\Controllers\UsersController@login');
 Route::put('/api/user/update', 'App\Http\Controllers\UsersController@update');
-Route::post('/api/user/update/avatar', 'App\Http\Controllers\UsersController@upload')->middleware(apiAuthMiddl::class);
+Route::post('/api/user/upload', 'App\Http\Controllers\UsersController@upload')->middleware(apiAuthMiddl::class);
+route::get('/api/user/avatar/{filename}', 'App\Http\Controllers\UsersController@getImage');
+route::get('/api/user/detaill/{ids}', 'App\Http\Controllers\UsersController@detail');
