@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\helpers\JwtAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
@@ -161,6 +162,32 @@ class UsersController extends Controller
 
     public function upload(Request $request)
     {
+        //Recoger los datos de la petición
+        $image = $request->file('file0');
 
+        //Validar si es una imagen
+        $validate = Validator::make($request->all(), [
+            'file0' => 'required|image|mimes:jpg,jpeg,png,gif',
+        ]);
+
+        //Guardar la imagen
+        if (!$image || $validate->fails()) {
+            $data = array(
+                'code' => 400,
+                'status' => 'error',
+                'message' => "error al subir imagen",
+            );
+        } else {
+            $image_name = time() . $image->getClientOriginalName();
+            Storage::disk('users')->put($image_name, File($image));
+            //Devolver el resultado
+
+            $data = array(
+                'image' => $image_name,
+                'status' => 'success',
+                'code' => 200,
+            );
+        }
+        return response()->json($data, $data['code']);
     }
 }

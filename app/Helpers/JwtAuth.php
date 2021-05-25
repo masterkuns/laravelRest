@@ -2,7 +2,9 @@
 namespace App\helpers;
 
 use App\Models\User;
+use DomainException;
 use Firebase\JWT\JWT;
+use UnexpectedValueException;
 
 class JwtAuth
 {
@@ -57,9 +59,9 @@ class JwtAuth
         try {
             $jwt = str_replace('"', '', $jwt);
             $decoded = JWT::decode($jwt, $this->key, ['HS256']);
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             $auth = false;
-        } catch (\DomainException $e) {
+        } catch (DomainException $e) {
             $auth = false;
         }
 
