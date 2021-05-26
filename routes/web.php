@@ -23,3 +23,4 @@ Route::put('/api/user/update', 'App\Http\Controllers\UsersController@update');
 Route::post('/api/user/upload', 'App\Http\Controllers\UsersController@upload')->middleware(apiAuthMiddl::class);
 route::get('/api/user/avatar/{filename}', 'App\Http\Controllers\UsersController@getImage');
 route::get('/api/user/detaill/{ids}', 'App\Http\Controllers\UsersController@detail');
+Route::resource('/api/lugar', 'App\Http\Controllers\LugarController');

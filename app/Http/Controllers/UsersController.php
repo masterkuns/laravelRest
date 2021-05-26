@@ -153,7 +153,7 @@ class UsersController extends Controller
         } else {
             //
             $data = array(
-                'code' => 400,
+                'code' => 404,
                 'status' => 'error',
                 'message' => "Usuario no identificado",
             );
