@@ -52,7 +52,7 @@ class LugarController extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'No se ha podido crear la categoria',
+                    'message' => 'No se ha podido crear el lugar',
                     'errors' => $validate->errors(),
                 );
             } else {
@@ -72,5 +72,64 @@ class LugarController extends Controller
             }
             return response()->json($data, $data['code']);
         }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $json = $request->input('json', null);
+        $params_array = array_map('trim', json_decode($json, true));
+        if (!empty($params_array)) {
+            $validate = Validator::make($params_array, [
+                'nombre' => 'required',
+                'valor' => 'required',
+                'ocupacion' => 'required',
+                'estado' => 'required',
+            ]);
+            unset($params_array['id']);
+
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'No se ha podido Actualizar el objeto',
+                    'errors' => $validate->errors(),
+                );
+            } else {
+                $lugar = Lugar::where('id', $id)->update(
+                    ['nombre' => $params_array['nombre']],
+                    ['valor' => $params_array['valor']],
+                    ['ocupacion' => $params_array['ocupacion']],
+                    ['estado' => $params_array['estado']]);
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Se Actualizo con exito el objeto',
+                    'luhar' => $lugar);
+            }
+            return response()->json($data, $data['code']);
+        }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+
+        $lugar = Lugar::find($id);
+
+        if (is_object($lugar) && !empty($lugar)) {
+            $lugar->delete();
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'lugar' => $lugar,
+            ];
+        } else {
+            $data = [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'La entrada no existe',
+            ];
+        }
+
+        return response()->json($data, $data['code']);
     }
 }
