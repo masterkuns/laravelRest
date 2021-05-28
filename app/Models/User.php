@@ -28,7 +28,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    public $timestamps = false;
+
     protected $hidden = [
         'contraseña',
         'remember_token',
