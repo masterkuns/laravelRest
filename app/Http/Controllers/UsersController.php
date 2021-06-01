@@ -71,6 +71,48 @@ class UsersController extends Controller
         }
 
     }
+
+    public function getAllMonitores()
+    {
+
+        $usuarios = User::where('rol', 'monitor')->get();
+
+        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'usuarios' => $usuarios]);
+
+        return $respuesta;
+
+    }
+
+    public function getAllCoordinadores()
+    {
+
+        $usuarios = User::where('rol', 'monitor')->get();
+
+        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'usuarios' => $usuarios]);
+
+        return $respuesta;
+
+    }
+    public function getAllAdministradores()
+    {
+
+        $usuarios = User::where('rol', 'administradores')->get();
+
+        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'usuarios' => $usuarios]);
+
+        return $respuesta;
+
+    }
+    public function getAllUsers()
+    {
+
+        $usuarios = User::whereNull('rol')->get();
+
+        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'usuarios' => $usuarios]);
+
+        return $respuesta;
+
+    }
     public function login(Request $request)
     {
         $jwtAuth = new \App\helpers\JwtAuth();

@@ -21,8 +21,12 @@ class User extends Authenticatable
         'documentos',
         'correo',
         'contraseña',
+        'rol',
+
     ];
 
+    const CREATED_AT = 'fechaInscripcion';
+    const UPDATED_AT = 'fechaActualizacion';
     /**
      * The attributes that should be hidden for arrays.
      *

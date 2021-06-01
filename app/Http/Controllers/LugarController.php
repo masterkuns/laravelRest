@@ -41,10 +41,10 @@ class LugarController extends Controller
         $params_array = array_map('trim', json_decode($json, true));
         if (!empty($params_array)) {
             $validate = Validator::make($params_array, [
-                'nombre' => 'required',
+                'nombre' => 'required|alpha',
                 'descripcion' => 'required',
                 'direccion' => 'required',
-                'valor' => 'required',
+                'valor' => 'required|numeric',
                 'ocupacion' => 'required',
                 'estado' => 'required',
             ]);

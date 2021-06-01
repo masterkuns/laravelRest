@@ -12,9 +12,11 @@ class Eventos extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'horainicio',
-        'horafinalizacion',
-        'idusuario',
+        'horaInicio',
+        'horaFinalizacion',
+        'idUsuario',
 
     ];
+    const CREATED_AT = 'fechaInscripcion';
+    const UPDATED_AT = 'fechaActualizacion';
 }
