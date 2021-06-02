@@ -16,9 +16,8 @@ class LugarController extends Controller
     public function index()
     {
         $lugar = Lugar::all();
-        $respuesta = response()->json(['code' => 200, 'status' => 'succes', 'lugar' => $lugar]);
-
-        return $respuesta;
+       
+        return response()->json(['code' => 200, 'status' => 'succes', 'lugar' => $lugar]);
 
     }
     public function show($id)

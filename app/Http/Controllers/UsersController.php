@@ -147,7 +147,7 @@ class UsersController extends Controller
             $data = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'El usuario se ha creado correctamente',
+                'message' => 'El usuario se ha identificado',
             );
 
             // $correo = "angeldav99@hotmail.com";

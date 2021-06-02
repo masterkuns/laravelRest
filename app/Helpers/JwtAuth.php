@@ -31,7 +31,7 @@ class JwtAuth
                 'sub' => $usuario->ids,
                 'correo' => $usuario->correo,
                 'nombres' => $usuario->nombres,
-                'nombres' => $usuario->apellidos,
+                'apellidos' => $usuario->apellidos,
                 'documentos' => $usuario->documentos,
                 'rol' => $usuario->rol,
                 'iat' => time(),
@@ -52,6 +52,7 @@ class JwtAuth
 
         }
         return $data;
+
     }
     public function checkToken($jwt, $getIdentity = false)
     {
