@@ -18,7 +18,7 @@ class JwtAuth
 
         $usuario = User::where([
             'correo' => $correo,
-            'contraseña' => $contraseña,
+            'contrasena' => $contraseña,
         ])->first();
 
         $signup = false;

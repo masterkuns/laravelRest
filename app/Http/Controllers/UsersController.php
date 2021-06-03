@@ -26,11 +26,11 @@ class UsersController extends Controller
 
             //Validar Datos
             $validate = Validator::make($paramsArray, [
-                'nombres' => 'required|alpha',
-                'apellidos' => 'required|alpha',
+                'nombres' => 'required',
+                'apellidos' => 'required',
                 'documentos' => 'required|unique:usuarios',
                 'correo' => 'required|email|unique:usuarios',
-                'contraseña' => 'required',
+                'contrasena' => 'required',
             ]); //Comprobar si el usuario existe
             if ($validate->fails()) {
                 $data = array(
@@ -42,7 +42,7 @@ class UsersController extends Controller
                 return response()->json($data, $data['code']);
             } else {
                 //Cifrar Pass
-                $pwd = hash('sha256', $params->contraseña);
+                $pwd = hash('sha256', $params->contrasena);
 
                 //Crear Usario
                 $user = new User();
@@ -50,7 +50,7 @@ class UsersController extends Controller
                 $user->apellidos = $paramsArray['apellidos'];
                 $user->documentos = $paramsArray['documentos'];
                 $user->correo = $paramsArray['correo'];
-                $user->contraseña = $pwd;
+                $user->contrasena = $pwd;
                 //Guardar el Usuario
                 $user->save();
 
@@ -124,7 +124,7 @@ class UsersController extends Controller
         $validate = Validator::make($paramsArray, [
 
             'correo' => 'required|email|',
-            'contraseña' => 'required',
+            'contrasena' => 'required',
         ]);
 
         if ($validate->fails()) {
@@ -137,8 +137,8 @@ class UsersController extends Controller
             );
         } else {
             //Validación correcta
-            //Cifrar la contraseña
-            $pwd = hash('sha256', $params->contraseña);
+            //Cifrar la contrasena
+            $pwd = hash('sha256', $params->contrasena);
             //Devolver datos
             $signup = $jwtAuth->singUp($params->correo, $pwd);
             if (!empty($params->gettoken)) {
@@ -151,8 +151,8 @@ class UsersController extends Controller
             );
 
             // $correo = "angeldav99@hotmail.com";
-            //$contraseña = 'lordaeron';
-            // $pwd = hash('sha256', $contraseña);
+            //$contrasena = 'lordaeron';
+            // $pwd = hash('sha256', $contrasena);
 
         }
         return response()->json($signup, 200);
@@ -179,7 +179,7 @@ class UsersController extends Controller
             //Quitar los campos que no quiero actualizar
             unset($params_array['id']);
             unset($params_array['rol']);
-            unset($params_array['contraseña']);
+            unset($params_array['contrasena']);
             unset($params_array['apellidos']);
             unset($params_array['estado']);
             //Actualizar el usuario en la base de datos
