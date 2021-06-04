@@ -117,13 +117,15 @@ class UsersController extends Controller
     {
         $jwtAuth = new \App\helpers\JwtAuth();
 
+        //Recoger los Datos POST
         $json = $request->input('json', null);
-        $params = json_decode($json);
-        $paramsArray = json_decode($json, true);
+        $params = json_decode($json); //objeto
+        $paramsArray = json_decode($json, true); //array
         //Validar Datos
+
         $validate = Validator::make($paramsArray, [
 
-            'correo' => 'required|email|',
+            'correo' => 'required|email',
             'contrasena' => 'required',
         ]);
 
