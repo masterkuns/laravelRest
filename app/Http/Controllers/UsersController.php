@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\helpers\JwtAuth;
 use App\Models\User;
-use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Storage;
@@ -72,6 +71,186 @@ class UsersController extends Controller
 
     }
 
+    public function registerAdmin(Request $request)
+    {
+
+        $json = $request->input('json', null);
+        $params = json_decode($json); //objeto
+        $paramsArray = json_decode($json, true); //array
+
+        if (!empty($params) && !empty($paramsArray)) {
+            //Limpiar Datos
+            $paramsArray = array_map('trim', $paramsArray);
+
+            //Validar Datos
+            $validate = Validator::make($paramsArray, [
+                'nombres' => 'required',
+                'apellidos' => 'required',
+                'documentos' => 'required|unique:usuarios',
+                'correo' => 'required|email|unique:usuarios',
+                'contrasena' => 'required',
+            ]); //Comprobar si el usuario existe
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'El usuario no se ha creados',
+                    'errors' => $validate->errors());
+
+                return response()->json($data, $data['code']);
+            } else {
+                //Cifrar Pass
+                $pwd = hash('sha256', $params->contrasena);
+
+                //Crear Usario
+                $user = new User();
+                $user->nombres = $paramsArray['nombres'];
+                $user->apellidos = $paramsArray['apellidos'];
+                $user->documentos = $paramsArray['documentos'];
+                $user->correo = $paramsArray['correo'];
+                $user->contrasena = $pwd;
+                $user->rol = 'ADMINISTRADOR';
+                //Guardar el Usuario
+                $user->save();
+
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario creado correctamentes');
+
+                return response()->json($data, $data['code']);
+            }
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Los Datos Enviados no son correctos');
+
+            return response()->json($data, $data['code']);
+        }
+
+    }
+
+    public function registerCoordinador(Request $request)
+    {
+
+        $json = $request->input('json', null);
+        $params = json_decode($json); //objeto
+        $paramsArray = json_decode($json, true); //array
+
+        if (!empty($params) && !empty($paramsArray)) {
+            //Limpiar Datos
+            $paramsArray = array_map('trim', $paramsArray);
+
+            //Validar Datos
+            $validate = Validator::make($paramsArray, [
+                'nombres' => 'required',
+                'apellidos' => 'required',
+                'documentos' => 'required|unique:usuarios',
+                'correo' => 'required|email|unique:usuarios',
+                'contrasena' => 'required',
+            ]); //Comprobar si el usuario existe
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'El usuario no se ha creados',
+                    'errors' => $validate->errors());
+
+                return response()->json($data, $data['code']);
+            } else {
+                //Cifrar Pass
+                $pwd = hash('sha256', $params->contrasena);
+
+                //Crear Usario
+                $user = new User();
+                $user->nombres = $paramsArray['nombres'];
+                $user->apellidos = $paramsArray['apellidos'];
+                $user->documentos = $paramsArray['documentos'];
+                $user->correo = $paramsArray['correo'];
+                $user->contrasena = $pwd;
+                $user->rol = 'COORDINADOR';
+                //Guardar el Usuario
+                $user->save();
+
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario creado correctamentes');
+
+                return response()->json($data, $data['code']);
+            }
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Los Datos Enviados no son correctos');
+
+            return response()->json($data, $data['code']);
+        }
+
+    }
+
+    public function registerMonitor(Request $request)
+    {
+
+        $json = $request->input('json', null);
+        $params = json_decode($json); //objeto
+        $paramsArray = json_decode($json, true); //array
+
+        if (!empty($params) && !empty($paramsArray)) {
+            //Limpiar Datos
+            $paramsArray = array_map('trim', $paramsArray);
+
+            //Validar Datos
+            $validate = Validator::make($paramsArray, [
+                'nombres' => 'required',
+                'apellidos' => 'required',
+                'documentos' => 'required|unique:usuarios',
+                'correo' => 'required|email|unique:usuarios',
+                'contrasena' => 'required',
+            ]); //Comprobar si el usuario existe
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'El usuario no se ha creados',
+                    'errors' => $validate->errors());
+
+                return response()->json($data, $data['code']);
+            } else {
+                //Cifrar Pass
+                $pwd = hash('sha256', $params->contrasena);
+
+                //Crear Usario
+                $user = new User();
+                $user->nombres = $paramsArray['nombres'];
+                $user->apellidos = $paramsArray['apellidos'];
+                $user->documentos = $paramsArray['documentos'];
+                $user->correo = $paramsArray['correo'];
+                $user->contrasena = $pwd;
+                $user->rol = 'COORDINADOR';
+                //Guardar el Usuario
+                $user->save();
+
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario creado correctamentes');
+
+                return response()->json($data, $data['code']);
+            }
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Los Datos Enviados no son correctos');
+
+            return response()->json($data, $data['code']);
+        }
+
+    }
+
     public function getAllMonitores()
     {
 
@@ -83,12 +262,12 @@ class UsersController extends Controller
 
     }
 
-    public function getAllCoordinadores()
+    public function getAllCoordinadoresAndAdministradores()
     {
 
-        $usuarios = User::where('rol', 'monitor')->get();
+        $usuarios = User::where('rol', 'COORDINADOR')->orWhere('rol', 'ADMINISTRADOR')->get();
 
-        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'usuarios' => $usuarios]);
+        $respuesta = response()->json(['code' => 200, 'status' => 'success', 'Coordinadores' => $usuarios]);
 
         return $respuesta;
 
@@ -159,6 +338,7 @@ class UsersController extends Controller
         }
         return response()->json($signup, 200);
     }
+
     public function update(Request $request)
     {
         $token = $request->header('Authorization');
@@ -204,6 +384,31 @@ class UsersController extends Controller
         }
         return response()->json($data, $data['code']);
 
+    }
+
+    public function eliminarId($id)
+    {
+        $usuario = User::find($id);
+
+        {
+            if (!empty($usuario)) {
+                $usuario->delete();
+                $data = array(
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => "el Usuario Borrado",
+                );
+
+            } else {
+
+                $data = array(
+                    'code' => 404,
+                    'status' => 'Error',
+                    'message' => "Usuario no Borrado",
+                );
+            }
+        }
+        return response()->json($data, $data['code']);
     }
 
     public function upload(Request $request)

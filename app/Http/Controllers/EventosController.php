@@ -121,7 +121,7 @@ class EventosController extends Controller
      * @param  \App\Models\Eventos  $eventos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Eventos $eventos)
+    public function destroy($id, Request $request)
     {
         //
     }
