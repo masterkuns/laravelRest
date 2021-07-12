@@ -292,6 +292,45 @@ class UsersController extends Controller
         return $respuesta;
 
     }
+    public function updateAdminUser(Request $request, $id)
+    {
+
+        $json = $request->input('json', null);
+        $params_array = array_map('trim', json_decode($json, true));
+        if (!empty($params_array)) {
+            $validate = Validator::make($params_array, [
+                'nombres' => 'required|alpha',
+                'email' => 'required|email|unique:usuarios,',
+                'contrasena' => 'required', //Comprobar si
+                'estado' => 'required', //Comprobar si
+            ]);
+            unset($params_array['id']);
+            unset($params_array['rol']);
+            unset($params_array['apellidos']);
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'No se ha podido Actualizar el objeto',
+                    'errors' => $validate->errors(),
+                );
+            } else {
+                $user = User::where('id', $id)->update(
+                    ['nombre' => $params_array['nombre']],
+                    ['valor' => $params_array['valor']],
+                    ['ocupacion' => $params_array['ocupacion']],
+                    ['estado' => $params_array['estado']]);
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Se Actualizo con exito el objeto',
+                    'luhar' => $user);
+            }
+            return response()->json($data, $data['code']);
+        }
+
+    }
+
     public function login(Request $request)
     {
         $jwtAuth = new \App\helpers\JwtAuth();
@@ -330,11 +369,9 @@ class UsersController extends Controller
                 'code' => 200,
                 'message' => 'El usuario se ha identificado',
             );
-
             // $correo = "angeldav99@hotmail.com";
             //$contrasena = 'lordaeron';
             // $pwd = hash('sha256', $contrasena);
-
         }
         return response()->json($signup, 200);
     }
@@ -360,10 +397,7 @@ class UsersController extends Controller
             ]);
             //Quitar los campos que no quiero actualizar
             unset($params_array['id']);
-            unset($params_array['rol']);
-            unset($params_array['contrasena']);
-            unset($params_array['apellidos']);
-            unset($params_array['estado']);
+
             //Actualizar el usuario en la base de datos
             $user_update = User::where('id', $user->sub)->update($params_array);
             //Devolver un array con el resultado
@@ -384,6 +418,65 @@ class UsersController extends Controller
         }
         return response()->json($data, $data['code']);
 
+    }
+    public function updateByAdmin($id, Request $request)
+    {
+        $json = $request->input('json', null);
+        $params = json_decode($json); //objeto
+        $params_array = array_map('trim', json_decode($json, true));
+        if (!empty($params_array)) {
+            $validate = Validator::make($params_array, [
+
+            ]);
+            unset($params_array['id']);
+
+            if ($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'No se ha podido Actualizar el objeto',
+                    'errors' => $validate->errors(),
+                );
+            } else {
+
+                $contraseña = isset($params_array['contrasena']);
+                if ($contraseña) {
+
+                    $pwd = hash('sha256', $params_array['contrasena']);
+                    $params_array['contrasena'] = $pwd;
+                    $user = User::where('id', $id)->update(
+                        ['nombres' => $params_array['nombres']],
+                        ['apellidos' => $params_array['apellidos']],
+                        ['documentos' => $params_array['documentos']],
+                        ['correo' => $params_array['correo']],
+                        ['contrasena' => $params_array['contrasena']],
+
+                    );
+                    $data = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Se Actualizo con exito el objeto',
+                        'user' => $user);
+                } else {
+
+                    $user = User::where('id', $id)->update(
+                        ['nombres' => $params_array['nombres']],
+                        ['apellidos' => $params_array['apellidos']],
+                        ['documentos' => $params_array['documentos']],
+                        ['correo' => $params_array['correo']],
+
+                    );
+                    $data = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Se Actualizo con exito el objeto',
+                        'user' => $user);
+
+                }
+
+            }
+            return response()->json($data, $data['code']);
+        }
     }
 
     public function eliminarId($id)

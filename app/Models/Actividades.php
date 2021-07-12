@@ -9,9 +9,11 @@ class Actividades extends Model
 {
     use HasFactory;
     protected $table = 'actividades';
-    protected $fillable = ['id,horaInicio',
+    protected $fillable =
+        ['id,
+    horaInicio',
         'horaFinalizacion',
-        'monitor'];
+        'monitor', 'idUsuario'];
     const CREATED_AT = 'fechaCreacion';
     const UPDATED_AT = 'fechaActualizacion';
 }

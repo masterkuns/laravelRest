@@ -26,6 +26,7 @@ Route::delete('/api/user/delete/{id}', 'App\Http\Controllers\UsersController@eli
 Route::post('/api/user/upload', 'App\Http\Controllers\UsersController@upload')->middleware(apiAuthMiddl::class);
 Route::get('/api/user/corrdinadores', 'App\Http\Controllers\UsersController@getAllCoordinadoresAndAdministradores');
 
+Route::put('/api/user/update/{id}', 'App\Http\Controllers\UsersController@updateByAdmin');
 route::get('/api/user/avatar/{filename}', 'App\Http\Controllers\UsersController@getImage');
 route::get('/api/user/detaill/{id}', 'App\Http\Controllers\UsersController@detail');
 Route::resource('/api/lugar', 'App\Http\Controllers\LugarController');

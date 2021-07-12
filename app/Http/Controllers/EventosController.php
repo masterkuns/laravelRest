@@ -123,6 +123,26 @@ class EventosController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        //
+        {
+
+            $lugar = Eventos::find($id);
+
+            if (is_object($lugar) && !empty($lugar)) {
+                $lugar->delete();
+                $data = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'lugar' => $lugar,
+                ];
+            } else {
+                $data = [
+                    'code' => 404,
+                    'status' => 'error',
+                    'message' => 'La entrada no existe',
+                ];
+            }
+
+            return response()->json($data, $data['code']);
+        }
     }
 }
